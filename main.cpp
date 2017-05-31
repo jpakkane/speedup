@@ -16,18 +16,37 @@
 
 #include<speedup.hpp>
 #include<cstdio>
-#include<array>
+#include<vector>
+#include<random>
+#include<chrono>
 
-constexpr const int BUFSIZE=1024*1024;
+constexpr const int BUFSIZE=100*1024*1024;
 
-std::array<uint8_t, BUFSIZE> create_random_array() {
-  std::array<uint8_t, BUFSIZE> buf;
+std::vector<uint8_t> create_random_array() {
+  std::vector<uint8_t> buf;
+  std::mt19937 gen(42); // For reproducibility.
+  std::uniform_int_distribution<> dis(0, 255);
+
+  buf.reserve(BUFSIZE);
+  for(int i=0; i<BUFSIZE; i++) {
+    buf.push_back(dis(gen));
+  }
   return buf;
 }
 
 int main(int, char**) {
+  int failed = 0;
+  const uint64_t correct_answer = 10038597640;
   auto buf = create_random_array();
-  auto answer = simple_loop(buf.data(), buf.size());
-  printf("The answer is %ld.\n", answer);
-  return 0;
+  auto t0 = std::chrono::high_resolution_clock::now();
+  auto simple_answer = simple_loop(buf.data(), buf.size());
+  auto t1 = std::chrono::high_resolution_clock::now();
+  if(simple_answer != correct_answer) {
+    printf("Simple evaluation produced wrong answer: %ld\n", simple_answer);
+    failed++;
+  } else {
+    int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t1-t0).count();
+    printf("Simple loop took %ld ms\n", count);
+  }
+  return failed;
 }
