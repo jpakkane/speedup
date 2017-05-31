@@ -38,6 +38,7 @@ int main(int, char**) {
   int failed = 0;
   const uint64_t correct_answer = 10038597640;
   auto buf = create_random_array();
+  auto mutbuf = buf;
   auto t0 = std::chrono::high_resolution_clock::now();
   auto simple_answer = simple_loop(buf.data(), buf.size());
   auto t1 = std::chrono::high_resolution_clock::now();
@@ -47,6 +48,8 @@ int main(int, char**) {
   auto t3 = std::chrono::high_resolution_clock::now();
   auto bit_answer = bit_fiddling(buf.data(), buf.size());
   auto t4 = std::chrono::high_resolution_clock::now();
+  auto partition_answer = partition(mutbuf.data(), mutbuf.size());
+  auto t5 = std::chrono::high_resolution_clock::now();
 
   if(simple_answer != correct_answer) {
     printf("Simple loop produced wrong answer: %ld\n", simple_answer);
@@ -78,6 +81,14 @@ int main(int, char**) {
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t4-t3).count();
     printf("Bit fiddling took %ld ms\n", count);
+  }
+
+  if(partition_answer != correct_answer) {
+    printf("Partitioning produced wrong answer: %ld\n", partition_answer);
+    failed++;
+  } else {
+    int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t5-t4).count();
+    printf("Partitioning took %ld ms\n", count);
   }
 
 
