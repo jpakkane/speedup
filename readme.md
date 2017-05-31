@@ -39,7 +39,7 @@ Some simple rules:
 
 # Currently fastest implementations
 
-On Ubuntu zesty, with an i7, GCC 6.3.0:
+Ubuntu zesty, with an i7, GCC 6.3.0:
 
  - O2: lookup table and bucket
  - O3: bit fiddling
@@ -49,4 +49,10 @@ Raspberry Pi 2B+, Raspbian Jessie, GCC 4.9.2:
  - O2: bit fiddling and bucket
  - O3: simple loop
 
-If you have access to hardware not listed above, please submit measurement results.
+Macbook Pro, Clang 8.0.0:
+
+ - O2: lookup
+ - O3: lookup
+
+If you have access to hardware not listed above, please submit
+measurement results.
