@@ -53,6 +53,8 @@ int main(int, char**) {
   auto t5 = std::chrono::high_resolution_clock::now();
   auto zeroing_answer = zeroing(mutbuf2.data(), mutbuf.size());
   auto t6 = std::chrono::high_resolution_clock::now();
+  auto bucket_answer = bucket(buf.data(), buf.size());
+  auto t7 = std::chrono::high_resolution_clock::now();
 
   if(simple_answer != correct_answer) {
     printf("Simple loop produced wrong answer: %ld\n", simple_answer);
@@ -101,6 +103,14 @@ int main(int, char**) {
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t6-t5).count();
     printf("Zeroing took %ld ms\n", count);
+  }
+
+  if(bucket_answer != correct_answer) {
+    printf("Bucket produced wrong answer: %ld\n", bucket_answer);
+    failed++;
+  } else {
+    int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t7-t6).count();
+    printf("Bucket took %ld ms\n", count);
   }
 
   return failed;

@@ -17,6 +17,7 @@
 #include<speedup.hpp>
 #include<array>
 #include<algorithm>
+#include<vector>
 
 uint64_t simple_loop(const uint8_t *buf, size_t bufsize) {
   uint64_t result = 0;
@@ -60,6 +61,19 @@ uint64_t bit_fiddling(const uint8_t *buf, size_t bufsize) {
 uint64_t cheaty_mccheatface(const uint8_t *, size_t ) {
   return 10038597640;
 }
+
+uint64_t bucket(const uint8_t *buf, size_t bufsize) {
+  std::vector<int> counts(256, 0);
+  uint64_t result=0;
+  for(size_t i=0; i<bufsize; ++i) {
+    ++counts[buf[i]];
+  }
+  for(size_t i=128; i<256; ++i) {
+    result += i*counts[i];
+  }
+  return result;
+}
+
 
 uint64_t partition(uint8_t *buf, size_t bufsize) {
   auto ppoint = std::partition(buf, buf + bufsize, [](const uint8_t i) { return i>=128; });
