@@ -57,60 +57,60 @@ int main(int, char**) {
   auto t7 = std::chrono::high_resolution_clock::now();
 
   if(simple_answer != correct_answer) {
-    printf("Simple loop produced wrong answer: %ld\n", simple_answer);
+    printf("Simple loop produced wrong answer: %ld\n", (long)simple_answer);
     failed++;
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t1-t0).count();
-    printf("Simple loop took %ld ms\n", count);
+    printf("Simple loop took %ld ms\n", (long)count);
   }
 
   if(cheaty_answer != correct_answer) {
-    printf("Cheaty produced wrong answer: %ld\n", cheaty_answer);
+    printf("Cheaty produced wrong answer: %ld\n", (long)cheaty_answer);
     failed++;
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t2-t1).count();
-    printf("Cheaty McCheatface took %ld ms\n", count);
+    printf("Cheaty McCheatface took %ld ms\n", (long)count);
   }
 
   if(lut_answer != correct_answer) {
-    printf("Lookup table produced wrong answer: %ld\n", lut_answer);
+    printf("Lookup table produced wrong answer: %ld\n", (long)lut_answer);
     failed++;
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t3-t2).count();
-    printf("Lookup table took %ld ms\n", count);
+    printf("Lookup table took %ld ms\n", (long)count);
   }
 
   if(bit_answer != correct_answer) {
-    printf("Bit fiddling produced wrong answer: %ld\n", bit_answer);
+    printf("Bit fiddling produced wrong answer: %ld\n", (long)bit_answer);
     failed++;
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t4-t3).count();
-    printf("Bit fiddling took %ld ms\n", count);
+    printf("Bit fiddling took %ld ms\n", (long)count);
   }
 
   if(partition_answer != correct_answer) {
-    printf("Partitioning produced wrong answer: %ld\n", partition_answer);
+    printf("Partitioning produced wrong answer: %ld\n", (long)partition_answer);
     failed++;
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t5-t4).count();
-    printf("Partitioning took %ld ms\n", count);
+    printf("Partitioning took %ld ms\n", (long)count);
   }
 
 
   if(zeroing_answer != correct_answer) {
-    printf("Zeroing produced wrong answer: %ld\n", zeroing_answer);
+    printf("Zeroing produced wrong answer: %ld\n", (long)zeroing_answer);
     failed++;
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t6-t5).count();
-    printf("Zeroing took %ld ms\n", count);
+    printf("Zeroing took %ld ms\n", (long)count);
   }
 
   if(bucket_answer != correct_answer) {
-    printf("Bucket produced wrong answer: %ld\n", bucket_answer);
+    printf("Bucket produced wrong answer: %ld\n", (long)bucket_answer);
     failed++;
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t7-t6).count();
-    printf("Bucket took %ld ms\n", count);
+    printf("Bucket took %ld ms\n", (long)count);
   }
 
   return failed;
