@@ -61,7 +61,7 @@ int main(int, char**) {
     failed++;
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t1-t0).count();
-    printf("Simple loop took %ld ms\n", (long)count);
+    printf("Simple loop took %ld μs\n", (long)count);
   }
 
   if(cheaty_answer != correct_answer) {
@@ -69,7 +69,7 @@ int main(int, char**) {
     failed++;
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t2-t1).count();
-    printf("Cheaty McCheatface took %ld ms\n", (long)count);
+    printf("Cheaty McCheatface took %ld μs\n", (long)count);
   }
 
   if(lut_answer != correct_answer) {
@@ -77,7 +77,7 @@ int main(int, char**) {
     failed++;
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t3-t2).count();
-    printf("Lookup table took %ld ms\n", (long)count);
+    printf("Lookup table took %ld μs\n", (long)count);
   }
 
   if(bit_answer != correct_answer) {
@@ -85,7 +85,7 @@ int main(int, char**) {
     failed++;
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t4-t3).count();
-    printf("Bit fiddling took %ld ms\n", (long)count);
+    printf("Bit fiddling took %ld μs\n", (long)count);
   }
 
   if(partition_answer != correct_answer) {
@@ -93,7 +93,7 @@ int main(int, char**) {
     failed++;
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t5-t4).count();
-    printf("Partitioning took %ld ms\n", (long)count);
+    printf("Partitioning took %ld μs\n", (long)count);
   }
 
 
@@ -102,7 +102,7 @@ int main(int, char**) {
     failed++;
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t6-t5).count();
-    printf("Zeroing took %ld ms\n", (long)count);
+    printf("Zeroing took %ld μs\n", (long)count);
   }
 
   if(bucket_answer != correct_answer) {
@@ -110,7 +110,7 @@ int main(int, char**) {
     failed++;
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t7-t6).count();
-    printf("Bucket took %ld ms\n", (long)count);
+    printf("Bucket took %ld μs\n", (long)count);
   }
 
   return failed;
