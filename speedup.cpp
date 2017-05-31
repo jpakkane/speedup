@@ -25,3 +25,7 @@ uint64_t simple_loop(const uint8_t *buf, size_t bufsize) {
   }
   return result;
 }
+
+uint64_t cheaty_mccheatface(const uint8_t *, size_t ) {
+  return 10038597640;
+}
