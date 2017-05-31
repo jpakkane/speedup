@@ -29,3 +29,4 @@ uint64_t bit_fiddling(const uint8_t *buf, size_t bufsize);
 /* Mutating functions */
 
 uint64_t partition(uint8_t *buf, size_t bufsize);
+uint64_t zeroing(uint8_t *buf, size_t bufsize);

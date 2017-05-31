@@ -70,3 +70,19 @@ uint64_t partition(uint8_t *buf, size_t bufsize) {
   }
   return result;
 }
+
+uint64_t zeroing(uint8_t *buf, size_t bufsize) {
+  // The reason this might be faster than the simple loop
+  // is that both loops can be parallelized as there
+  // are no data dependencies.
+  uint64_t result = 0;
+  for(size_t i=0; i<bufsize; i++) {
+    if(buf[i] < 128) {
+      buf[i] = 0;
+    }
+  }
+  for(size_t i=0; i<bufsize; i++) {
+    result += buf[i];
+  }
+  return result;
+}
