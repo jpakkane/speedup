@@ -43,6 +43,8 @@ int main(int, char**) {
   auto t1 = std::chrono::high_resolution_clock::now();
   auto cheaty_answer = cheaty_mccheatface(buf.data(), buf.size());
   auto t2 = std::chrono::high_resolution_clock::now();
+  auto lut_answer = lookup_table(buf.data(), buf.size());
+  auto t3 = std::chrono::high_resolution_clock::now();
 
   if(simple_answer != correct_answer) {
     printf("Simple loop produced wrong answer: %ld\n", simple_answer);
@@ -51,12 +53,21 @@ int main(int, char**) {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t1-t0).count();
     printf("Simple loop took %ld ms\n", count);
   }
+
   if(cheaty_answer != correct_answer) {
     printf("Cheaty produced wrong answer: %ld\n", simple_answer);
     failed++;
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t2-t1).count();
     printf("Cheaty McCheatface took %ld ms\n", count);
+  }
+
+  if(lut_answer != correct_answer) {
+    printf("Lookup table produced wrong answer: %ld\n", simple_answer);
+    failed++;
+  } else {
+    int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t3-t2).count();
+    printf("Lookup table took %ld ms\n", count);
   }
   return failed;
 }

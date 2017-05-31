@@ -15,13 +15,31 @@
  */
 
 #include<speedup.hpp>
+#include<array>
 
 uint64_t simple_loop(const uint8_t *buf, size_t bufsize) {
-  uint64_t result=0;
+  uint64_t result = 0;
   for(size_t i=0; i<bufsize; i++) {
     if(buf[i] >= 128) {
       result += buf[i];
     }
+  }
+  return result;
+}
+
+uint64_t lookup_table(const uint8_t *buf, size_t bufsize) {
+  uint64_t result = 0;
+  std::array<uint8_t, 256> lut;
+  for(int i=0; i<256; i++) {
+    if(i >= 128) {
+      lut[i] = (uint8_t) i;
+    } else {
+      lut[i] = 0;
+    }
+  }
+
+  for(size_t i=0; i<bufsize; i++) {
+    result += lut[buf[i]];
   }
   return result;
 }
