@@ -45,6 +45,8 @@ int main(int, char**) {
   auto t2 = std::chrono::high_resolution_clock::now();
   auto lut_answer = lookup_table(buf.data(), buf.size());
   auto t3 = std::chrono::high_resolution_clock::now();
+  auto bit_answer = bit_fiddling(buf.data(), buf.size());
+  auto t4 = std::chrono::high_resolution_clock::now();
 
   if(simple_answer != correct_answer) {
     printf("Simple loop produced wrong answer: %ld\n", simple_answer);
@@ -55,7 +57,7 @@ int main(int, char**) {
   }
 
   if(cheaty_answer != correct_answer) {
-    printf("Cheaty produced wrong answer: %ld\n", simple_answer);
+    printf("Cheaty produced wrong answer: %ld\n", cheaty_answer);
     failed++;
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t2-t1).count();
@@ -63,11 +65,21 @@ int main(int, char**) {
   }
 
   if(lut_answer != correct_answer) {
-    printf("Lookup table produced wrong answer: %ld\n", simple_answer);
+    printf("Lookup table produced wrong answer: %ld\n", lut_answer);
     failed++;
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t3-t2).count();
     printf("Lookup table took %ld ms\n", count);
   }
+
+  if(bit_answer != correct_answer) {
+    printf("Bit fiddling produced wrong answer: %ld\n", bit_answer);
+    failed++;
+  } else {
+    int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t4-t3).count();
+    printf("Bit fiddling took %ld ms\n", count);
+  }
+
+
   return failed;
 }

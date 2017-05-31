@@ -44,6 +44,18 @@ uint64_t lookup_table(const uint8_t *buf, size_t bufsize) {
   return result;
 }
 
+uint64_t bit_fiddling(const uint8_t *buf, size_t bufsize) {
+  uint64_t result = 0;
+  for(size_t i=0; i<bufsize; i++) {
+    // NOTE: non-portable. Right shifting is not
+    // guaranteed to be an arithmetic shift, but
+    // that is what GCC does.
+    uint8_t mask = ((int8_t)buf[i]) >> 7;
+    result += buf[i] & mask;
+  }
+  return result;
+}
+
 uint64_t cheaty_mccheatface(const uint8_t *, size_t ) {
   return 10038597640;
 }

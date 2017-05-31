@@ -20,5 +20,6 @@
 #include<cstddef>
 
 uint64_t simple_loop(const uint8_t *buf, size_t bufsize);
-uint64_t lookup_table(const uint8_t *buf, size_t bufsize);
 uint64_t cheaty_mccheatface(const uint8_t *buf, size_t bufsize);
+uint64_t lookup_table(const uint8_t *buf, size_t bufsize);
+uint64_t bit_fiddling(const uint8_t *buf, size_t bufsize);
