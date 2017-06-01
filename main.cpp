@@ -55,6 +55,8 @@ int main(int, char**) {
   auto t6 = std::chrono::high_resolution_clock::now();
   auto bucket_answer = bucket(buf.data(), buf.size());
   auto t7 = std::chrono::high_resolution_clock::now();
+  auto multiply_filter_answer = multiply_filter(buf.data(), buf.size());
+  auto t8 = std::chrono::high_resolution_clock::now();
 
   if(simple_answer != correct_answer) {
     printf("Simple loop produced wrong answer: %ld\n", (long)simple_answer);
@@ -111,6 +113,14 @@ int main(int, char**) {
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t7-t6).count();
     printf("Bucket took %ld μs\n", (long)count);
+  }
+
+  if(multiply_filter_answer != correct_answer) {
+    printf("Multi produced wrong answer: %ld\n", (long)multiply_filter_answer);
+    failed++;
+  } else {
+    int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t8-t7).count();
+    printf("Multi took %ld μs\n", (long)count);
   }
 
   return failed;

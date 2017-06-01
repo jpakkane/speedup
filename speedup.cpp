@@ -74,6 +74,14 @@ uint64_t bucket(const uint8_t *buf, size_t bufsize) {
   return result;
 }
 
+uint64_t multiply_filter(const uint8_t *buf, size_t bufsize) {
+  uint64_t result = 0;
+  for(size_t i=0; i<bufsize; i++) {
+    result += (buf[i] >= 128) * buf[i];
+  }
+  return result;
+}
+
 
 uint64_t partition(uint8_t *buf, size_t bufsize) {
   auto ppoint = std::partition(buf, buf + bufsize, [](const uint8_t i) { return i>=128; });
