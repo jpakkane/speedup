@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-#include<speedup.hpp>
-#include<array>
-#include<algorithm>
-#include<vector>
+#include "speedup.hpp"
+#include <array>
+#include <algorithm>
+#include <vector>
 
 uint64_t simple_loop(const uint8_t *buf, size_t bufsize) {
   uint64_t result = 0;
