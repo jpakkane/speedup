@@ -77,7 +77,7 @@ uint64_t bucket(const uint8_t *buf, size_t bufsize) {
 uint64_t multiply_filter(const uint8_t *buf, size_t bufsize) {
   uint64_t result = 0;
   for(size_t i=0; i<bufsize; i++) {
-    result += (buf[i] >= 128) * buf[i];
+    result += (buf[i] >= 128 ? 1 : 0) * buf[i];
   }
   return result;
 }
