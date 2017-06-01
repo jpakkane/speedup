@@ -16,8 +16,8 @@
 
 #pragma once
 
-#include<cstdint>
-#include<cstddef>
+#include <cstdint>
+#include <cstddef>
 
 /* Non-mutating functions. */
 
