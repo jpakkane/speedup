@@ -118,23 +118,33 @@ uint64_t parallel_add_lookup(const uint8_t *buf, size_t bufsize) {
   assert(bufsize % 8 == 0);
   std::array<uint64_t, 256> masks;
   for (size_t i = 0; i < 256; i++) {
-    masks[i] = mask((i >> 7) & 0x01) << 56 | mask((i >> 6) & 0x01) << 48 |
-               mask((i >> 5) & 0x01) << 40 | mask((i >> 4) & 0x01) << 32 |
-               mask((i >> 3) & 0x01) << 24 | mask((i >> 2) & 0x01) << 16 |
-               mask((i >> 1) & 0x01) << 8 | mask(i & 0x01);
+    // Bit reverse and reverse: see below
+    masks[i] = mask((i >> 7) & 0x01) << 0 | mask((i >> 6) & 0x01) << 32 |
+               mask((i >> 5) & 0x01) << 16 | mask((i >> 4) & 0x01) << 48 |
+               mask((i >> 3) & 0x01) << 8 | mask((i >> 2) & 0x01) << 40 |
+               mask((i >> 1) & 0x01) << 24 | mask(i & 0x01) << 56;
   }
   uint64_t result = 0;
   const uint64_t *b = reinterpret_cast<const uint64_t *>(buf);
 
   for (size_t i = 0; i < bufsize / 8; i++) {
     uint64_t x = b[i];
+    // Only highest bits of each byte set
     uint64_t maskin = x & (0x8080808080808080ul);
-    uint64_t maskidx =
-        (maskin >> 56 | maskin >> 49 | maskin >> 42 | maskin >> 35 |
-         maskin >> 28 | maskin >> 21 | maskin >> 14 | maskin >> 7) &
-        0xFFul;
 
-    x &= masks[maskidx];
+    // Wrap highest bits to bit-reverse reverse order. The additional
+    // reverse saves us one shift for each round. Original bit order:
+    // a..b..c..d..e..f..g..h..
+    maskin = (maskin & 0xFFFFFFFFul) | (maskin >> 33);
+    // ea..fb..gc..hd
+    maskin = (maskin & 0xFFFFul) | (maskin >> 18);
+    // gcea..hdfb..
+    maskin = (maskin & 0xFFul) | (maskin >> 12);
+    // hdfbgcea
+
+    // Mask out bytes < 127
+    x &= masks[maskin];
+    // Sum bytes in parallel
     x = ((x & 0xFF00FF00FF00FF00ul) >> 8) + (x & 0x00FF00FF00FF00FFul);
     x = ((x & 0xFFFF0000FFFF0000ul) >> 16) + (x & 0x0000FFFF0000FFFFul);
     x = ((x & 0xFFFFFFFF00000000ul) >> 32) + (x & 0x00000000FFFFFFFFul);
