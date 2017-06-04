@@ -57,6 +57,8 @@ int main(int, char**) {
   auto t7 = std::chrono::high_resolution_clock::now();
   auto multiply_filter_answer = multiply_filter(buf.data(), buf.size());
   auto t8 = std::chrono::high_resolution_clock::now();
+  auto parallel_add_lookup_answer = parallel_add_lookup(buf.data(), buf.size());
+  auto t9 = std::chrono::high_resolution_clock::now();
 
   if(simple_answer != correct_answer) {
     printf("Simple loop produced wrong answer: %ld\n", (long)simple_answer);
@@ -121,6 +123,14 @@ int main(int, char**) {
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t8-t7).count();
     printf("Multi took %ld μs\n", (long)count);
+  }
+
+  if(parallel_add_lookup_answer != correct_answer) {
+    printf("Parallel_add_lookup produced wrong answer: %ld\n", (long)parallel_add_lookup_answer);
+    failed++;
+  } else {
+    int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t9-t8).count();
+    printf("Parallel add lookup took %ld μs\n", (long)count);
   }
 
   return failed;

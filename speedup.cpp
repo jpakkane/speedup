@@ -18,6 +18,7 @@
 #include<array>
 #include<algorithm>
 #include<vector>
+#include<cassert>
 
 uint64_t simple_loop(const uint8_t *buf, size_t bufsize) {
   uint64_t result = 0;
@@ -106,5 +107,39 @@ uint64_t zeroing(uint8_t *buf, size_t bufsize) {
   for(size_t i=0; i<bufsize; i++) {
     result += buf[i];
   }
+  return result;
+}
+
+inline uint64_t mask(uint8_t i) {
+  return i ? 0xff : 0x0;
+}
+
+uint64_t parallel_add_lookup(const uint8_t *buf, size_t bufsize) {
+  assert(bufsize % 8 == 0);
+  std::array<uint64_t, 256> masks;
+  for (size_t i = 0; i < 256; i++) {
+    masks[i] = mask((i >> 7) & 0x01) << 56 | mask((i >> 6) & 0x01) << 48 |
+               mask((i >> 5) & 0x01) << 40 | mask((i >> 4) & 0x01) << 32 |
+               mask((i >> 3) & 0x01) << 24 | mask((i >> 2) & 0x01) << 16 |
+               mask((i >> 1) & 0x01) << 8 | mask(i & 0x01);
+  }
+  uint64_t result = 0;
+  const uint64_t *b = reinterpret_cast<const uint64_t *>(buf);
+
+  for (size_t i = 0; i < bufsize / 8; i++) {
+    uint64_t x = b[i];
+    uint64_t maskin = x & (0x8080808080808080ul);
+    uint64_t maskidx =
+        (maskin >> 56 | maskin >> 49 | maskin >> 42 | maskin >> 35 |
+         maskin >> 28 | maskin >> 21 | maskin >> 14 | maskin >> 7) &
+        0xFFul;
+
+    x &= masks[maskidx];
+    x = ((x & 0xFF00FF00FF00FF00ul) >> 8) + (x & 0x00FF00FF00FF00FFul);
+    x = ((x & 0xFFFF0000FFFF0000ul) >> 16) + (x & 0x0000FFFF0000FFFFul);
+    x = ((x & 0xFFFFFFFF00000000ul) >> 32) + (x & 0x00000000FFFFFFFFul);
+    result += x;
+  }
+
   return result;
 }
