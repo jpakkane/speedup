@@ -36,7 +36,11 @@ std::vector<uint8_t> create_random_array() {
 
 int main(int, char**) {
   int failed = 0;
+#ifdef __APPLE__
+  const uint64_t correct_answer = 10039589478;
+#else 
   const uint64_t correct_answer = 10038597640;
+#endif
   auto buf = create_random_array();
   auto mutbuf = buf;
   auto mutbuf2 = buf;

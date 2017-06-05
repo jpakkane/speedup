@@ -60,7 +60,11 @@ uint64_t bit_fiddling(const uint8_t *buf, size_t bufsize) {
 }
 
 uint64_t cheaty_mccheatface(const uint8_t *, size_t ) {
+#ifdef __APPLE__
+  return 10039589478;
+#else 
   return 10038597640;
+#endif
 }
 
 uint64_t bucket(const uint8_t *buf, size_t bufsize) {
