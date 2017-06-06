@@ -18,9 +18,14 @@ import sys, os, shutil, json
 import matplotlib.pyplot as plt
 
 def do_plots(mfile, outdir):
+    platform = os.path.splitext(os.path.split(mfile)[1])[0]
     measurements = json.load(open(mfile))
-    m = measurements[0]
-    times = m['times']
+    for i, m in enumerate(measurements):
+        ofilename = os.path.join(outdir, '%d.png' % i)
+        plot_single(platform, m, ofilename)
+
+def plot_single(platform, measurements, ofilename):
+    times = measurements['times']
     fig, ax = plt.subplots()
     fig.subplots_adjust(bottom=0.2)
     values = []
@@ -34,13 +39,21 @@ def do_plots(mfile, outdir):
     width = 0.8
     p1 = plt.bar(ind, values, width)
 
+    compiler = measurements['compiler']
+    buildtype = measurements['buildtype']
+    is_sorted = 'sorted' if measurements['sort'] else 'unsorted'
+    cpu_flag = measurements['cpu_flag']
+    if cpu_flag == '':
+        cpu_flag = 'no CPU flags'
+    title = '%s: %s, %s, %s, %s' % (platform, compiler, buildtype, is_sorted, cpu_flag)
     plt.ylabel('Microseconds')
-    plt.title('Evaluation time')
+    plt.title(title)
     plt.xticks(ind, methods)
     ax.autoscale_view()
     plt.setp(plt.gca().get_xticklabels(), rotation=45, horizontalalignment='right')
-    plt.show()
-#    plt.savefig('test.pdf')
+#    plt.show()
+    plt.savefig(ofilename)
+    plt.close(fig)
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:

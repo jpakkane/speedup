@@ -55,17 +55,25 @@ def measure_one(builddir, compiler, extra_flag, sort, buildtype):
 def do_measurements():
     measurements = []
     if platform.processor() == 'x86_64':
-        cpu_flags = ['', '-mavx', '-msse4.2', '-msse2', '-msse']
+        gcc_cpu_flags = ['', '-mavx', '-msse4.2', '-msse2', '-msse']
     elif platform.machine().startswith('arm'):
-        cpu_flags = ['', '-mfpu=neon']
+        gcc_cpu_flags = ['', '-mfpu=neon']
     else:
         sys.exit('Unsupported CPU.')
+    cl_cpu_flags = [''] # Add /arch:AVX and /arch:AVX2
     builddir = 'buildmeasurement'
     compilers = []
-    for c in ['g++', 'clang++', 'cl']:
+    if platform.system().lower() == 'linux':
+        trials = ['g++', 'clang++']
+    elif platform.system.lower() == 'windows':
+        trials = ['g++', 'clang++', 'cl']
+    elif platform.system.lower() == 'darwin':
+        trials = ['clang++'] # On OSX g++ is an alias to clang++
+    for c in trials:
         if shutil.which(c):
             compilers.append(c)
     for compiler in compilers:
+        cpu_flags = cl_cpu_flags if compiler == 'cl' else gcc_cpu_flags
         for cpu_flag in cpu_flags:
             for sort in [True, False]:
                 for buildtype in ['debugoptimized', 'release']:
@@ -79,7 +87,7 @@ def do_measurements():
     return measurements
 
 if __name__ == '__main__':
-    if len(sys.argv) != :
+    if len(sys.argv) != 2:
         print(sys.argv[1], '<output file name>')
         sys.exit(1)
     if not os.path.isfile('meson.build'):
@@ -88,4 +96,3 @@ if __name__ == '__main__':
     ofilename = sys.argv[1]
     measurements = do_measurements()
     json.dump(measurements, open(ofilename, 'w'))
-
