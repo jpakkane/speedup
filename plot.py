@@ -17,14 +17,24 @@
 import sys, os, shutil, json
 import matplotlib.pyplot as plt
 
+def find_max(measurements):
+    y_max = 0
+    for m in measurements:
+        for t in m['times'].values():
+            t = int(t)
+            if t>y_max:
+                y_max = t
+    return y_max
+
 def do_plots(mfile, outdir):
     platform = os.path.splitext(os.path.split(mfile)[1])[0]
     measurements = json.load(open(mfile))
+    y_max = find_max(measurements)
     for i, m in enumerate(measurements):
         ofilename = os.path.join(outdir, '%d.png' % i)
-        plot_single(platform, m, ofilename)
+        plot_single(platform, y_max, m, ofilename)
 
-def plot_single(platform, measurements, ofilename):
+def plot_single(platform, y_max, measurements, ofilename):
     times = measurements['times']
     fig, ax = plt.subplots()
     fig.subplots_adjust(bottom=0.2)
@@ -49,7 +59,7 @@ def plot_single(platform, measurements, ofilename):
     plt.ylabel('Microseconds')
     plt.title(title)
     plt.xticks(ind, methods)
-    ax.autoscale_view()
+    plt.ylim(0, y_max)
     plt.setp(plt.gca().get_xticklabels(), rotation=45, horizontalalignment='right')
 #    plt.show()
     plt.savefig(ofilename)
