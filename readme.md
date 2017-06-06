@@ -39,27 +39,27 @@ Some simple rules:
 
 # Measurements
 
-MBPro, Clang 8.0, -O2:
+Intel i7, GCC 6.3, -O2:
 
-    Parallel add lookup  35089 μs
-    Lookup table         42877 μs
-    Multi                53129 μs
-    Bucket               92197 μs
-    Simple loop          94968 μs
-    Bit fiddling        117988 μs
-    Zeroing             492027 μs
-    Partitioning        519611 μs
+    paradd     38030 μs
+    lut        54987 μs
+    bucket     54990 μs
+    multi      81016 μs
+    simple     81256 μs
+    bitfiddle  62836 μs
+    partition 379627 μs
+    zeroing   367643 μs
 
 Raspberry Pi 2B+, Raspbian Jessie, GCC 4.9.2, -O2:
 
-    Bit fiddling         979319 μs
-    Bucket               985220 μs
-    Simple loop         1094934 μs
-    Parallel add lookup 1208879 μs
-    Multi               1213093 μs
-    Lookup table        1215792 μs
-    Zeroing             1256000 μs
-    Partitioning        1922750 μs
+    Bit fiddling          988622 μs
+    Bucket                992603 μs
+    Simple loop          1104662 μs
+    Parallel add lookup  1158125 μs
+    Lookup table         1223642 μs
+    Zeroing              1267950 μs
+    Multi                1222455 μs
+    Partitioning         1939782 μs
 
 Please note that the measurements vary wildly between -O2 and -O3,
 flags such as -mfpu=neon etc, the compiler used etc. Do your own
