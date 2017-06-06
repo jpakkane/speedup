@@ -54,14 +54,17 @@ def measure_one(builddir, compiler, extra_flag, sort, buildtype):
 
 def do_measurements():
     measurements = []
-    if platform.processor() != 'x86_64':
+    if platform.processor() == 'x86_64':
+        cpu_flags = ['', '-mavx', '-msse4.2', '-msse2', '-msse']
+    elif platform.machine().startswith('arm'):
+        cpu_flags = ['', '-mfpu=neon']
+    else:
         sys.exit('Unsupported CPU.')
     builddir = 'buildmeasurement'
     compilers = []
     for c in ['g++', 'clang++', 'cl']:
         if shutil.which(c):
             compilers.append(c)
-    cpu_flags = ['', '-mavx', '-msse4.2', '-msse2', '-msse']
     for compiler in compilers:
         for cpu_flag in cpu_flags:
             for sort in [True, False]:
@@ -76,9 +79,13 @@ def do_measurements():
     return measurements
 
 if __name__ == '__main__':
+    if len(sys.argv) != :
+        print(sys.argv[1], '<output file name>')
+        sys.exit(1)
     if not os.path.isfile('meson.build'):
         print('This script must be run in the top of the source dir.')
         sys.exit(1)
+    ofilename = sys.argv[1]
     measurements = do_measurements()
-    json.dump(measurements, open('measurements.json', 'w'))
+    json.dump(measurements, open(ofilename, 'w'))
 
