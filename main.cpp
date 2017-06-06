@@ -19,6 +19,8 @@
 #include<vector>
 #include<random>
 #include<chrono>
+#include<algorithm>
+#include<cstring>
 
 constexpr const int BUFSIZE=100*1024*1024;
 
@@ -34,7 +36,7 @@ std::vector<uint8_t> create_random_array() {
   return buf;
 }
 
-int main(int, char**) {
+int main(int argc, char **argv) {
   int failed = 0;
 #ifdef __APPLE__
   const uint64_t correct_answer = 10039589478;
@@ -42,6 +44,9 @@ int main(int, char**) {
   const uint64_t correct_answer = 10038597640;
 #endif
   auto buf = create_random_array();
+  if(argc > 1 && strcmp(argv[1], "--sort") == 0) {
+    std::sort(buf.begin(), buf.end());
+  }
   auto mutbuf = buf;
   auto mutbuf2 = buf;
   auto t0 = std::chrono::high_resolution_clock::now();
