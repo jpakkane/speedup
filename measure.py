@@ -16,7 +16,7 @@
 
 import subprocess, sys, os, shutil, platform, json
 
-meson_commands = ['meson', 'meson.py', '/home/jpakkane/workspace/meson/meson.py', 'c:/users/IEUser/meson/meson.py']
+meson_commands = ['meson', 'meson.py', '/home/jpakkane/workspace/meson/meson.py', 'c:/users/IEUser/meson/meson.py', '/Users/jpakkane/meson/meson.py']
 
 meson_bin = None
 
@@ -54,7 +54,7 @@ def measure_one(builddir, compiler, extra_flag, sort, buildtype):
 
 def do_measurements():
     measurements = []
-    if platform.processor() == 'x86_64' or 'Intel64' in platform.processor():
+    if platform.processor() == 'x86_64' or platform.processor() == 'i386' or 'Intel64' in platform.processor():
         gcc_cpu_flags = ['', '-mavx', '-msse4.2', '-msse2', '-msse']
     elif platform.machine().startswith('arm'):
         gcc_cpu_flags = ['', '-mfpu=neon']
@@ -67,7 +67,7 @@ def do_measurements():
         trials = ['g++', 'clang++']
     elif platform.system().lower() == 'windows':
         trials = ['g++', 'clang++', 'cl']
-    elif platform.system.lower() == 'darwin':
+    elif platform.system().lower() == 'darwin':
         trials = ['clang++'] # On OSX g++ is an alias to clang++
     for c in trials:
         if shutil.which(c):
