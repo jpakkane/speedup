@@ -16,7 +16,7 @@
 
 import subprocess, sys, os, shutil, platform, json
 
-meson_commands = ['meson', 'meson.py', '/home/jpakkane/workspace/meson/meson.py']
+meson_commands = ['meson', 'meson.py', '/home/jpakkane/workspace/meson/meson.py', 'c:/users/IEUser/meson/meson.py']
 
 meson_bin = None
 
@@ -38,7 +38,7 @@ def measure_one(builddir, compiler, extra_flag, sort, buildtype):
         sort_arg = ['--sort']
     else:
         sort_arg = []
-    subprocess.check_call([meson_bin, builddir, '--buildtype=' + buildtype] , stdout=subprocess.DEVNULL, env=env)
+    subprocess.check_call([sys.executable, meson_bin, builddir, '--buildtype=' + buildtype] , stdout=subprocess.DEVNULL, env=env)
     subprocess.check_call(['ninja', '-C', builddir], stdout=subprocess.DEVNULL)
     out = subprocess.check_output([os.path.join(builddir, 'speedup')] + sort_arg)
     out = out.decode('utf-8')
@@ -54,18 +54,18 @@ def measure_one(builddir, compiler, extra_flag, sort, buildtype):
 
 def do_measurements():
     measurements = []
-    if platform.processor() == 'x86_64':
+    if platform.processor() == 'x86_64' or 'Intel64' in platform.processor():
         gcc_cpu_flags = ['', '-mavx', '-msse4.2', '-msse2', '-msse']
     elif platform.machine().startswith('arm'):
         gcc_cpu_flags = ['', '-mfpu=neon']
     else:
-        sys.exit('Unsupported CPU.')
+        sys.exit('Unsupported CPU: ' + platform.processor())
     cl_cpu_flags = [''] # Add /arch:AVX and /arch:AVX2
     builddir = 'buildmeasurement'
     compilers = []
     if platform.system().lower() == 'linux':
         trials = ['g++', 'clang++']
-    elif platform.system.lower() == 'windows':
+    elif platform.system().lower() == 'windows':
         trials = ['g++', 'clang++', 'cl']
     elif platform.system.lower() == 'darwin':
         trials = ['clang++'] # On OSX g++ is an alias to clang++

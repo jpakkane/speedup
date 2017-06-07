@@ -38,11 +38,6 @@ std::vector<uint8_t> create_random_array() {
 
 int main(int argc, char **argv) {
   int failed = 0;
-#ifdef __APPLE__
-  const uint64_t correct_answer = 10039589478;
-#else 
-  const uint64_t correct_answer = 10038597640;
-#endif
   auto buf = create_random_array();
   if(argc > 1 && strcmp(argv[1], "--sort") == 0) {
     std::sort(buf.begin(), buf.end());
@@ -69,6 +64,7 @@ int main(int argc, char **argv) {
   auto parallel_add_lookup_answer = parallel_add_lookup(buf.data(), buf.size());
   auto t9 = std::chrono::high_resolution_clock::now();
 
+  const uint64_t correct_answer = simple_answer;
   if(simple_answer != correct_answer) {
     printf("Simple loop produced wrong answer: %ld\n", (long)simple_answer);
     failed++;
@@ -76,7 +72,7 @@ int main(int argc, char **argv) {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t1-t0).count();
     printf("simple %ld μs\n", (long)count);
   }
-
+  /*
   if(cheaty_answer != correct_answer) {
     printf("Cheaty produced wrong answer: %ld\n", (long)cheaty_answer);
     failed++;
@@ -84,7 +80,7 @@ int main(int argc, char **argv) {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t2-t1).count();
     printf("cheaty %ld μs\n", (long)count);
   }
-
+  */
   if(lut_answer != correct_answer) {
     printf("Lookup table produced wrong answer: %ld\n", (long)lut_answer);
     failed++;
