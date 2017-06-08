@@ -26,6 +26,18 @@ To switch between O2 and O3 do:
     ninja
     ./speedup
 
+# Measuring and plotting
+
+To run the full test measurement run do:
+
+    ./measure.py output_file.json
+
+Creating plots requires Matplotlib and is run like this:
+
+    ./plot.py output_file.json output_dir
+
+The plotter creates one picture per measurement setup.
+
 # Contributing
 
 If you have an algorithm you want to contribute, please file a pull request.
