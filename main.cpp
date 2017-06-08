@@ -63,6 +63,8 @@ int main(int argc, char **argv) {
   auto t8 = std::chrono::high_resolution_clock::now();
   auto parallel_add_lookup_answer = parallel_add_lookup(buf.data(), buf.size());
   auto t9 = std::chrono::high_resolution_clock::now();
+  auto simple_16b_answer = simple_16b(buf.data(), buf.size());
+  auto t10 = std::chrono::high_resolution_clock::now();
 
   const uint64_t correct_answer = simple_answer;
   if(simple_answer != correct_answer) {
@@ -136,6 +138,14 @@ int main(int argc, char **argv) {
   } else {
     int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t9-t8).count();
     printf("paradd %ld μs\n", (long)count);
+  }
+
+  if(simple_16b_answer != correct_answer) {
+    printf("Simple_16b produced wrong answer: %ld\n", (long)simple_16b_answer);
+    failed++;
+  } else {
+    int64_t count = std::chrono::duration_cast<std::chrono::microseconds>(t10-t9).count();
+    printf("simple16b %ld μs\n", (long)count);
   }
 
   return failed;

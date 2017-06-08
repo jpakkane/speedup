@@ -161,3 +161,15 @@ uint64_t parallel_add_lookup(const uint8_t *buf, size_t bufsize) {
 
   return result;
 }
+
+uint64_t simple_16b(const uint8_t *buf, size_t bufsize) {
+    uint64_t result = 0;
+    for(size_t i=0; i<bufsize;) {
+        uint16_t presult = 0;
+        for(size_t j=0; j<256; j++,i++) {
+            presult += (uint8_t)std::min<int8_t>(buf[i],0); //Not guranteed to be portable: implemention defined behavior for casting unsigned to signed
+        }
+        result += presult;
+    }
+    return result;
+}
