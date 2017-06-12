@@ -22,7 +22,7 @@
 #include<algorithm>
 #include<cstring>
 
-constexpr const int BUFSIZE=100*1024*1024;
+constexpr const int BUFSIZE=10*1024*1024;
 
 std::vector<uint8_t> create_random_array() {
   std::vector<uint8_t> buf;
