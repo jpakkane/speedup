@@ -12,3 +12,14 @@ if host_machine.cpu_family() == 'x86_64'
   avx_args = '-mavx2' # FIXME make work on MSVC.
   executable('speedup_x86', 'main_x86.cpp', 'speedup_x86.cpp', cpp_args : avx_args)
 endif
+
+if get_option('use_compute')
+  conf = configuration_data()
+  conf.set('BOOST_COMPUTE_DEBUG_KERNEL_COMPILATION', get_option('buildtype').contains('debug'))
+  configure_file(output : 'config.h', configuration : conf)
+
+  # OpenCL doesn't do pkg-config or have Meson support
+  executable('speedup_compute', 'main_compute.cpp', 'speedup_compute.cpp',
+             link_args: '-lOpenCL')
+endif
+

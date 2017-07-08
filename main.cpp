@@ -42,6 +42,7 @@ int main(int argc, char **argv) {
   if(argc > 1 && strcmp(argv[1], "--sort") == 0) {
     std::sort(buf.begin(), buf.end());
   }
+
   auto mutbuf = buf;
   auto mutbuf2 = buf;
   auto t0 = std::chrono::high_resolution_clock::now();
