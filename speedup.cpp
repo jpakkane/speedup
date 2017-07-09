@@ -115,26 +115,29 @@ uint64_t zeroing(uint8_t *buf, size_t bufsize) {
 }
 
 uint64_t parallel_add(const uint8_t *buf, size_t bufsize) {
-  assert(bufsize % 8 == 0);
+  assert(bufsize % (8 * 256) == 0);
 
   static const uint64_t all_hi_bits = 0x8080808080808080ul;
 
   uint64_t result = 0;
   const uint64_t *b = reinterpret_cast<const uint64_t *>(buf);
 
-  for (size_t i = 0; i < bufsize / 8; i++) {
-    uint64_t x = b[i];
-    // Set lowest bit for every byte with bit 7 set.
-    uint64_t lobits = (x & all_hi_bits) >> 7;
-    // Subtract from 128: 127 is 1111111B
-    uint64_t mask = (all_hi_bits - lobits) | all_hi_bits;
+  for (size_t i = 0; i < bufsize / 8;) {
+    uint64_t partsum = 0;
+    for (size_t j = 0; j < 256; i++, j++) {
+      uint64_t x = b[i];
+      // Set lowest bit for every byte with bit 7 set.
+      uint64_t lobits = (x & all_hi_bits) >> 7;
+      // Subtract from 128: 127 is 1111111B
+      uint64_t mask = (all_hi_bits - lobits) | all_hi_bits;
 
-    x &= mask;
-    // Sum bytes in parallel
-    x = ((x & 0xFF00FF00FF00FF00ul) >> 8) + (x & 0x00FF00FF00FF00FFul);
-    x = ((x & 0xFFFF0000FFFF0000ul) >> 16) + (x & 0x0000FFFF0000FFFFul);
-    x = ((x & 0xFFFFFFFF00000000ul) >> 32) + (x & 0x00000000FFFFFFFFul);
-    result += x;
+      x &= mask;
+      // Sum bytes in parallel
+      partsum += ((x & 0xFF00FF00FF00FF00ul) >> 8) + (x & 0x00FF00FF00FF00FFul);
+    }
+    partsum = ((partsum & 0xFFFF0000FFFF0000ul) >> 16) + (partsum & 0x0000FFFF0000FFFFul);
+    partsum = ((partsum & 0xFFFFFFFF00000000ul) >> 32) + (partsum & 0x00000000FFFFFFFFul);
+    result += partsum;
   }
 
   return result;
