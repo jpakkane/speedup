@@ -22,7 +22,7 @@ meson_bin = None
 
 for c in meson_commands:
     if shutil.which(c):
-        meson_bin = c
+        meson_bin = shutil.which(c)
         break
 
 if not meson_bin:

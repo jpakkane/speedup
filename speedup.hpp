@@ -16,6 +16,7 @@
 
 #pragma once
 
+#include"config.h"
 #include<cstdint>
 #include<cstddef>
 
@@ -27,7 +28,7 @@ uint64_t lookup_table(const uint8_t *buf, size_t bufsize);
 uint64_t bit_fiddling(const uint8_t *buf, size_t bufsize);
 uint64_t bucket(const uint8_t *buf, size_t bufsize);
 uint64_t multiply_filter(const uint8_t *buf, size_t bufsize);
-uint64_t parallel_add_lookup(const uint8_t *buf, size_t bufsize);
+uint64_t parallel_add(const uint8_t *buf, size_t bufsize);
 uint64_t simple_16b(const uint8_t *buf, size_t bufsize);
 
 /* Mutating functions */

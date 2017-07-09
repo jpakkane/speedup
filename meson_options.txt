@@ -1,0 +1,2 @@
+option('use_compute', type : 'boolean', value : 'False', description:
+    'Use boost.compute versions of functions')
