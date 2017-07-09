@@ -18,8 +18,14 @@ if get_option('use_compute')
   conf.set('BOOST_COMPUTE_DEBUG_KERNEL_COMPILATION', get_option('buildtype').contains('debug'))
   configure_file(output : 'config.h', configuration : conf)
 
+  if host_machine.system() == 'darwin'
+    link_opencl_flags = ['-framework', 'OpenCL']
+  else
+    link_opencl_flags = '-lOpenCL'
+  endif
+
   # OpenCL doesn't do pkg-config or have Meson support
   executable('speedup_compute', 'main_compute.cpp', 'speedup_compute.cpp',
-             link_args: '-lOpenCL')
+             link_args: link_opencl_flags)
 endif
 
